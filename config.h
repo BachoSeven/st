@@ -200,6 +200,7 @@ ResourcePref resources[] = {
 		{ "background",   STRING,  &colorname[258] },
 		{ "foreground",   STRING,  &colorname[259] },
 		{ "cursorColor",  STRING,  &colorname[256] },
+		{ "RcursorColor", STRING,  &colorname[257] },
 		{ "termname",     STRING,  &termname },
 		{ "shell",        STRING,  &shell },
 		{ "blinktimeout", INTEGER, &blinktimeout },
