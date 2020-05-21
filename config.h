@@ -5,8 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Hack Nerd Font:pixelsize=16:antialias=true:autohint=true";
-static char *font2[] = { "JoyPixels:pixelsize=10:antialias=true:autohint=true" };
+static char *font = "Hack Nerd Font:pixelsize=18:antialias=true:autohint=true";
+static char *font2[] = { "JoyPixels:pixelsize=16:antialias=true:autohint=true" };
 static int borderpx = 2;
 
 /*
@@ -141,10 +141,10 @@ static const char *colorname[] = {
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
  */
-unsigned int defaultfg = 259;
-unsigned int defaultbg = 258;
 unsigned int defaultcs = 256;
 unsigned int defaultrcs = 257;
+unsigned int defaultbg = 258;
+unsigned int defaultfg = 259;
 
 /*
  * Default shape of cursor
