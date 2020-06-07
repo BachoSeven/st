@@ -194,6 +194,7 @@ static void mousesel(XEvent *, int);
 static void mousereport(XEvent *);
 static char *kmap(KeySym, uint);
 static int match(uint, uint);
+static int borderpx;
 
 static void run(void);
 static void usage(void);
