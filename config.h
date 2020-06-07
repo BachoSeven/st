@@ -7,8 +7,8 @@
  * borderperc: percentage of cell width to use as a border
  *		0 = no border, 100 = border width is same as cell width
  */
-static char *font = "Hack Nerd Font:pixelsize=16:antialias=true:autohint=true";
-static char *font2[] = { "Noto Color Emoji:pixelsize=13:antialias=true:autohint=true" };
+static char *font = "Hack Nerd Font:pixelsize=18:antialias=true:autohint=true";
+static char *font2[] = { "JoyPixel:pixelsize=8:antialias=true:autohint=true"};
 static int borderperc = 5;
 
 /*
