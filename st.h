@@ -107,6 +107,7 @@ void sendbreak(const Arg *);
 void toggleprinter(const Arg *);
 
 int tattrset(int);
+int tisaltscr(void);
 void tnew(int, int);
 void tresize(int, int);
 void tsetdirtattr(int);
@@ -138,7 +139,6 @@ ushort boxdrawindex(const Glyph *);
 void boxdraw_xinit(Display *, Colormap, XftDraw *, Visual *);
 void drawboxes(int, int, int, int, XftColor *, XftColor *, const XftGlyphFontSpec *, int);
 #endif
-
 
 /* config.h globals */
 extern char *utmp;

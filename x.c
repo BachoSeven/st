@@ -31,8 +31,8 @@ typedef struct {
 } Shortcut;
 
 typedef struct {
-	uint mod;
-	uint button;
+	uint b;
+	uint mask;
 	void (*func)(const Arg *);
 	const Arg arg;
 	uint  release;
@@ -483,6 +483,7 @@ void
 bpress(XEvent *e)
 {
 	struct timespec now;
+	MouseKey *mk;
 	int snap;
 
 	if (IS_SET(MODE_MOUSE) && !(e->xbutton.state & forcemousemod)) {
@@ -492,6 +493,14 @@ bpress(XEvent *e)
 
 	if (mouseaction(e, 0))
 		return;
+
+	for (mk = mkeys; mk < mkeys + LEN(mkeys); mk++) {
+		if (e->xbutton.button == mk->b
+				&& match(mk->mask, e->xbutton.state)) {
+			mk->func(&mk->arg);
+			return;
+		}
+	}
 
 	if (e->xbutton.button == Button1) {
 		/*
@@ -1190,7 +1199,7 @@ xunloadfonts(void)
 	xunloadfont(&dc.ibfont);
 }
 
-int
+void
 ximopen(Display *dpy)
 {
 	XIMCallback imdestroy = { .client_data = NULL, .callback = ximdestroy };

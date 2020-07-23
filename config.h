@@ -21,8 +21,6 @@ static int borderperc = 5;
  */
 static char *shell = "/bin/sh";
 char *utmp = NULL;
-/* scroll program: to enable use a string like "scroll" */
-char *scroll = NULL;
 char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
 
 /* identification sequence returned in DA and DECID */
@@ -45,10 +43,6 @@ static unsigned int tripleclicktimeout = 600;
 
 /* alt screens */
 int allowaltscreen = 1;
-
-/* allow certain non-interactive (insecure) window operations such as:
-   setting the clipboard text */
-int allowwindowops = 0;
 
 /*
  * draw latency range in ms - from new content/keypress/etc until drawing.
@@ -225,18 +219,10 @@ ResourcePref resources[] = {
  * Internal mouse shortcuts.
  * Beware that overloading Button1 will disable the selection.
  */
-// static MouseShortcut mshortcuts[] = {
-	// [> mask                 button   function        argument <]
-	// { XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
-	// { XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
-// };
-
 static MouseShortcut mshortcuts[] = {
-	/* mask                 button   function        argument       release */
-	// { ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
-	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
-	// { ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
-	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
+	/* button               mask            string */
+	{ Button4,              XK_NO_MOD,      "\031" },
+	{ Button5,              XK_NO_MOD,      "\005" },
 };
 
 /* Internal keyboard shortcuts. */
@@ -245,12 +231,10 @@ static MouseShortcut mshortcuts[] = {
 
 MouseKey mkeys[] = {
 	/* button               mask            function        argument */
-	{ Button4,              ShiftMask,      kscrollup,      {.i =  1} },
-	{ Button5,              ShiftMask,      kscrolldown,    {.i =  1} },
-	{ Button4,              MODKEY,         kscrollup,      {.i =  1} },
-	{ Button5,              MODKEY,         kscrolldown,    {.i =  1} },
-	{ TERMMOD,              Button4,        zoom,           {.f =  +1} },
-	{ TERMMOD,              Button5,        zoom,           {.f =  -1} },
+	{ Button4,              XK_NO_MOD,      kscrollup,      {.i =  1} },
+	{ Button5,              XK_NO_MOD,      kscrolldown,    {.i =  1} },
+	{ Button4,              TERMMOD,        zoom,           {.f =  +1} },
+	{ Button5,              TERMMOD,        zoom,           {.f =  -1} },
 };
 
 static char *openurlcmd[] = { "/bin/sh", "-c", "st-urlhandler", "externalpipe", NULL };
@@ -339,7 +323,7 @@ static uint ignoremod = Mod2Mask|XK_SWITCH_MOD;
  * Note that if you want to use ShiftMask with selmasks, set this to an other
  * modifier, set to 0 to not use it.
  */
-static uint forcemousemod = ShiftMask;
+static uint forceselmod = ShiftMask;
 
 /*
  * This is the huge key array which defines all compatibility to the Linux
