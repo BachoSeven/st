@@ -1,3 +1,7 @@
+Hi, this is just luke's build up to date with my modifications; only additional patch applied is `relative border`.
+Soon, I will update Luke's build to the 0.8.4 `st` version.
+
+
 # Luke's build of st - the simple (suckless) terminal
 
 The [suckless terminal (st)](https://st.suckless.org/) with some additional features that make it literally the best terminal emulator ever:
