@@ -1,4 +1,4 @@
-Hi, this is just luke's build up to date with my modifications; only additional patch applied is `relative border`.
+Hi, this is just luke's build up to date with my modifications; only additional patches applied are `relative border` and `swapmouse`.
 Soon, I will update Luke's build to the 0.8.4 `st` version.
 
 

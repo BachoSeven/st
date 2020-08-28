@@ -223,6 +223,8 @@ static MouseShortcut mshortcuts[] = {
 	/* button               mask            string */
 	{ Button4,              XK_NO_MOD,      "\031" },
 	{ Button5,              XK_NO_MOD,      "\005" },
+	// { Button8,              XK_NO_MOD,      "\031" },
+	// { Button9,              XK_NO_MOD,      "\005" },
 };
 
 /* Internal keyboard shortcuts. */
@@ -235,6 +237,8 @@ MouseKey mkeys[] = {
 	{ Button5,              XK_NO_MOD,      kscrolldown,    {.i =  1} },
 	{ Button4,              TERMMOD,        zoom,           {.f =  +1} },
 	{ Button5,              TERMMOD,        zoom,           {.f =  -1} },
+	// { Button9,		XK_NO_MOD,	kscrollup,	{.i =  -1} },
+	// { Button8,		XK_NO_MOD,	kscrolldown,	{.i =  -1} },
 };
 
 static char *openurlcmd[] = { "/bin/sh", "-c", "st-urlhandler", "externalpipe", NULL };
