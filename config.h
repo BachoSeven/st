@@ -8,7 +8,7 @@
  *		0 = no border, 100 = border width is same as cell width
  */
 static char *font = "BlexMono Nerd Font:pixelsize=16:antialias=true:autohint=true";
-static char *font2[] = { "Mutant Standard emoji:pixelsize=10:antialias=true:autohint=true"};
+static char *font2[] = { "Mutant Standard emoji:pixelsize=20:antialias=true:autohint=true"};
 static int borderperc = 5;
 
 /*
