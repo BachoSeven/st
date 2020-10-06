@@ -11,7 +11,7 @@ static char *font = "scientifica:pixelsize=20:antialias=true:autohint=true";
 static char *font2[] = {
 	"CozetteVector:pixelsize=20:antialias=true:autohint=true",
 	"Mutant Standard emoji:pixelsize=18:antialias=true:autohint=true",
-	"Source Han Sans HC",
+	"Sarasa Mono K",
 };
 static int borderperc = 4;
 
