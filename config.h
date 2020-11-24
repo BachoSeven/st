@@ -7,9 +7,10 @@
  * borderperc: percentage of cell width to use as a border
  *		0 = no border, 100 = border width is same as cell width
  */
-static char *font = "scientifica:pixelsize=20:antialias=true:autohint=true";
+static char *font = "Hack Nerd Font:pixelsize=20:antialias=true:autohint=true";
+// static char *font = "scientifica:pixelsize=20:antialias=true:autohint=true";
 static char *font2[] = {
-	"CozetteVector:pixelsize=20:antialias=true:autohint=true",
+	// "CozetteVector:pixelsize=20:antialias=true:autohint=true",
 	"JoyPixels:pixelsize=18:antialias=true:autohint=true",
 	"Sarasa Mono K:pixelsize=18:antialias=true:autohint=true",
 };
