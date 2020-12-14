@@ -11,7 +11,7 @@ static char *font = "Hack Nerd Font:size=16:antialias=true:autohint=true";
 // static char *font = "scientifica:pixelsize=20:antialias=true:autohint=true";
 static char *font2[] = {
 	// "CozetteVector:pixelsize=20:antialias=true:autohint=true",
-	"JoyPixels:size=18:antialias=true:autohint=true",
+	"JoyPixels:size=17:antialias=true:autohint=true",
 	"Sarasa Mono K:antialias=true:autohint=true",
 };
 static int borderperc = 4;
