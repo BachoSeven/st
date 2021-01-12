@@ -13,7 +13,7 @@ static char *font2[] = {
 	// "CozetteVector:size=22:autohint=true",
 	"JoyPixels:pixelsize=22:antialias=true:autohint=true",
 	"Sarasa Mono K:pixelsize=22:antialias=true:autohint=true",
-	"Typicons:size=16:antialias=true:autohint=true",
+	"Typicons:pixelsize=22:antialias=true:autohint=true",
 };
 static int borderperc = 4;
 
