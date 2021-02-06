@@ -8,12 +8,11 @@
  *		0 = no border, 100 = border width is same as cell width
  */
 static char *font = "Hack Nerd Font:pixelsize=24:antialias=true:autohint=true";
-// static char *font = "scientifica:size=25:autohint=true";
+// static char *font = "scientifica:pixelsize=26:autohint=true";
 static char *font2[] = {
-	// "CozetteVector:pixelsize=25:autohint=true",
-	"JoyPixels:pixelsize=25:antialias=true:autohint=true",
-	"Sarasa Mono K:size=25:antialias=true:autohint=true",
-	"Typicons:size=25:antialias=true:autohint=true",
+	// "CozetteVector:pixelsize=26:autohint=true",
+	"JoyPixels:pixelsize=21:antialias=true:autohint=true",
+	"Sarasa Mono K:pixelsize=21:antialias=true:autohint=true",
 };
 static int borderperc = 5;
 
@@ -169,7 +168,7 @@ unsigned int defaultfg = 259;
  * 7: Blinking st cursor (snowman)
  * 8: Steady st cursor
  */
-static unsigned int cursorstyle = 1;
+static unsigned int cursorstyle = 5;
 static Rune stcursor = 0x2603; /* snowman (U+2603) */
 
 /*
