@@ -7,15 +7,15 @@
  * borderperc: percentage of cell width to use as a border
  *		0 = no border, 100 = border width is same as cell width
  */
-static char *font = "Hack Nerd Font:size=15:antialias=true:autohint=true";
-// static char *font = "scientifica:size=20:autohint=true";
+static char *font = "Hack Nerd Font:pixelsize=24:antialias=true:autohint=true";
+// static char *font = "scientifica:size=25:autohint=true";
 static char *font2[] = {
-	// "CozetteVector:size=20:autohint=true",
-	"JoyPixels:size=15:antialias=true:autohint=true",
-	"Sarasa Mono K:size=15:antialias=true:autohint=true",
-	"Typicons:size=15:antialias=true:autohint=true",
+	// "CozetteVector:pixelsize=25:autohint=true",
+	"JoyPixels:pixelsize=25:antialias=true:autohint=true",
+	"Sarasa Mono K:size=25:antialias=true:autohint=true",
+	"Typicons:size=25:antialias=true:autohint=true",
 };
-static int borderperc = 4;
+static int borderperc = 5;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -86,7 +86,7 @@ const int boxdraw = 1;
 const int boxdraw_bold = 0;
 
 /* braille (U28XX):  1: render as adjacent "pixels",  0: use font */
-const int boxdraw_braille = 0;
+const int boxdraw_braille = 1;
 
 /*
  * bell volume. It must be a value between -100 and 100. Use 0 for disabling
@@ -269,9 +269,9 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Prior,       zoom,           {.f = +1} },
 	{ TERMMOD,              XK_Next,        zoom,           {.f = -1} },
 	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
-	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
+	{ TERMMOD,              XK_X,           clipcopy,       {.i =  0} },
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
-	{ MODKEY,               XK_c,           clipcopy,       {.i =  0} },
+	{ MODKEY,               XK_x,           clipcopy,       {.i =  0} },
 	{ ShiftMask,            XK_Insert,      clippaste,      {.i =  0} },
 	{ MODKEY,               XK_v,           clippaste,      {.i =  0} },
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },

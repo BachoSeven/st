@@ -1702,6 +1702,7 @@ xdrawcursor(int cx, int cy, Glyph g, int ox, int oy, Glyph og, Line line, int le
 		case 1: /* Blinking block (default) */
 			if (IS_SET(MODE_BLINK))
 				break;
+			/* FALLTHROUGH */
 		case 2: /* Steady Block */
 			xdrawglyph(g, cx, cy);
 			break;
