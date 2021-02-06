@@ -1,5 +1,9 @@
-Hi, this is just luke's build up to date with my modifications; only additional patches applied are `relative border` and `swapmouse`.
-I might update Luke's build to the 0.8.4 `st` version soon
+Hi, this is luke's 0.8.4 build with custom modifications; additional patches applied are:
+
+- `relative border`
+- `swapmouse`
+- `blinking cursor`
+- `bold is not bright`
 
 ### Credits
 
