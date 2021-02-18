@@ -7,12 +7,15 @@
  * borderperc: percentage of cell width to use as a border
  *		0 = no border, 100 = border width is same as cell width
  */
-static char *font = "Hack Nerd Font:pixelsize=24:antialias=true:autohint=true";
-// static char *font = "scientifica:pixelsize=26:autohint=true";
+static char *fonts[] = {
+	"Hack Nerd Font:pixelsize=22:antialias=true:autohint=true",
+	"scientifica:pixelsize=26:autohint=true"
+};
+static int fonts_current = 0;
 static char *font2[] = {
-	// "CozetteVector:pixelsize=26:autohint=true",
 	"JoyPixels:pixelsize=21:antialias=true:autohint=true",
 	"Sarasa Mono K:pixelsize=21:antialias=true:autohint=true",
+	"CozetteVector:pixelsize=26:autohint=true",
 };
 static int borderperc = 5;
 
@@ -119,7 +122,7 @@ float alpha = 0.7;
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
   /* 8 normal colors */
-  [0] = "#1d2021", /* medium contrast: #282828 / soft contrast: #32302f */
+  [0] = "#32302f", /* medium contrast: #282828 / hard contrast: #1d2021 */
   [1] = "#cc241d", /* red     */
   [2] = "#98971a", /* green   */
   [3] = "#d79921", /* yellow  */
@@ -202,7 +205,7 @@ static uint forcemousemod = ShiftMask;
  * Xresources preferences to load at startup
  */
 ResourcePref resources[] = {
-		{ "font",         STRING,  &font },
+		{ "fonts0",       STRING,  &fonts[0] },
 		{ "fontalt0",     STRING,  &font2[0] },
 		{ "color0",       STRING,  &colorname[0] },
 		{ "color1",       STRING,  &colorname[1] },
@@ -277,6 +280,7 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
 	{ MODKEY,		XK_s,		changealpha,	{.f = -0.05} },
 	{ MODKEY,		XK_a,		changealpha,	{.f = +0.05} },
+	{ TERMMOD,		XK_S,		cyclefonts,	{} },
 	{ TERMMOD,              XK_Up,          zoom,           {.f = +1} },
 	{ TERMMOD,              XK_Down,        zoom,           {.f = -1} },
 	{ TERMMOD,              XK_K,           zoom,           {.f = +1} },
