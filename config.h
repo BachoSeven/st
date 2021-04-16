@@ -17,7 +17,7 @@ static char *font2[] = {
 	"Sarasa Mono K:pixelsize=21:antialias=true:autohint=true",
 	"CozetteVector:pixelsize=26:autohint=true",
 };
-static int borderperc = 5;
+static int borderperc = 70;
 
 /*
  * What program is execed by st depends of these precedence rules:
