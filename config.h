@@ -14,7 +14,10 @@ static char *fonts[] = {
 static int fonts_current = 0;
 static char *font2[] = {
 	"JoyPixels:pixelsize=21:antialias=true:autohint=true",
-	"Sarasa Mono K:pixelsize=21:antialias=true:autohint=true",
+	"Noto Sans CJK JP:pixelsize=21:antialias=true:autohint=true",
+	"Noto Sans CJK KR:pixelsize=21:antialias=true:autohint=true",
+	"Noto Sans CJK SC:pixelsize=21:antialias=true:autohint=true",
+	"Noto Sans CJK TC:pixelsize=21:antialias=true:autohint=true",
 	"CozetteVector:pixelsize=26:autohint=true",
 };
 static int borderperc = 70;
