@@ -8,7 +8,8 @@
  *		0 = no border, 100 = border width is same as cell width
  */
 static char *fonts[] = {
-	"Hack Nerd Font:pixelsize=22:antialias=true:autohint=true",
+	"mononoki Nerd Font:pixelsize=24:antialias=true:autohint=true",
+	"Hack Nerd Font:pixelsize=24:antialias=true:autohint=true",
 	"scientifica:pixelsize=26:autohint=true"
 };
 static int fonts_current = 0;
