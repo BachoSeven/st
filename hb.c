@@ -13,13 +13,13 @@
 /*
  * Replace 0 with a list of font features, wrapped in FEATURE macro, e.g.
  * FEATURE('c', 'a', 'l', 't'), FEATURE('d', 'l', 'i', 'g')
- * 
- * Uncomment either one of the 2 lines below. Uncomment the prior to disable (any) font features. Uncomment the 
+ *
+ * Uncomment either one of the 2 lines below. Uncomment the prior to disable (any) font features. Uncomment the
  * latter to enable the (selected) font features.
  */
 
-hb_feature_t features[] = { 0 };
-//hb_feature_t features[] = { FEATURE('s','s','0','1'), FEATURE('s','s','0','2'), FEATURE('s','s','0','3'), FEATURE('s','s','0','5'), FEATURE('s','s','0','6'), FEATURE('s','s','0','7'), FEATURE('s','s','0','8'), FEATURE('z','e','r','o') };
+/* hb_feature_t features[] = { 0 }; */
+hb_feature_t features[] = { FEATURE('s','s','0','1'), FEATURE('s','s','0','2'), FEATURE('s','s','0','3'), FEATURE('s','s','0','5'), FEATURE('s','s','0','6'), FEATURE('s','s','0','7'), FEATURE('s','s','0','8'), FEATURE('z','e','r','o') };
 
 void hbtransformsegment(XftFont *xfont, const Glyph *string, hb_codepoint_t *codepoints, int start, int length);
 hb_font_t *hbfindfont(XftFont *match);
