@@ -1,5 +1,4 @@
-st
 .gitignore
 *.o
-pkg/
-*.pkg.tar.xz
+st
+*.orig
