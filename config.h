@@ -3,25 +3,28 @@
 /*
  * appearance
  *
- * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  * borderperc: percentage of cell width to use as a border
  *		0 = no border, 100 = border width is same as cell width
+ * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
+static int borderperc = 70;
 static char *fonts[] = {
-	"mononoki Nerd Font:pixelsize=24:antialias=true:autohint=true",
+	"monospace:pixelsize=24:antialias=true:autohint=true",
+	"JuliaMono:pixelsize=24:antialias=true:autohint=true",
 	"Hack Nerd Font:pixelsize=24:antialias=true:autohint=true",
 	"scientifica:pixelsize=26:autohint=true"
 };
 static int fonts_current = 0;
 static char *font2[] = {
 	"JoyPixels:pixelsize=21:antialias=true:autohint=true",
+	"Noto Color Emoji:pixelsize=21:antialias=true:autohint=true",
 	"Noto Sans CJK JP:pixelsize=21:antialias=true:autohint=true",
 	"Noto Sans CJK KR:pixelsize=21:antialias=true:autohint=true",
 	"Noto Sans CJK SC:pixelsize=21:antialias=true:autohint=true",
 	"Noto Sans CJK TC:pixelsize=21:antialias=true:autohint=true",
-	"CozetteVector:pixelsize=26:autohint=true",
+	"Noto Sans Hebrew:pixelsize=17:antialias=true:autohint=true"
+	"Libertinus Sans:pixelsize=20:antialias=true:autohint=true"
 };
-static int borderperc = 70;
 
 /*
  * What program is execed by st depends of these precedence rules:

@@ -1279,6 +1279,9 @@ xinit(int cols, int rows)
 	XWindowAttributes attr;
 	XVisualInfo vis;
 
+	if(!(xw.dpy = XOpenDisplay(NULL)))
+		die("Can't open display\n");
+
 	xw.scr = XDefaultScreen(xw.dpy);
 
 	if (!(opt_embed && (parent = strtol(opt_embed, NULL, 0)))) {
@@ -1296,6 +1299,7 @@ xinit(int cols, int rows)
 	if (!FcInit())
 		die("could not init fontconfig.\n");
 
+	/* old stuff */
 	/* usedfont = (opt_font == NULL)? font : opt_font; */
 	/* xloadfonts(usedfont, 0); */
 	usedfont = fonts[fonts_current];
@@ -2254,15 +2258,45 @@ config_init(void)
 	char *resm;
 	XrmDatabase db;
 	ResourcePref *p;
+	Display *dpy;
+
+	if(!(dpy = XOpenDisplay(NULL)))
+		die("Can't open display\n");
 
 	XrmInitialize();
-	resm = XResourceManagerString(xw.dpy);
+	resm = XResourceManagerString(dpy);
 	if (!resm)
 		return;
 
 	db = XrmGetStringDatabase(resm);
 	for (p = resources; p < resources + LEN(resources); p++)
 		resource_load(db, p->name, p->type, p->dst);
+	XFlush(dpy);
+	XCloseDisplay(dpy);
+}
+
+void
+reload(int sig)
+{
+	signal(SIGUSR1, reload);
+
+	if (sig == -1) {
+		return;
+	}
+
+	config_init();
+
+	/* colors, fonts */
+	xloadcols();
+	xunloadfonts();
+	xloadfonts(fonts[fonts_current], 0);
+
+	/* pretend the window just got resized */
+	cresize(win.w, win.h);
+	redraw();
+
+	/* triggers re-render if we're visible. */
+	ttywrite("\033[O", 3, 0);
 }
 
 void
@@ -2342,9 +2376,6 @@ run:
 	setlocale(LC_CTYPE, "");
 	XSetLocaleModifiers("");
 
-	if(!(xw.dpy = XOpenDisplay(NULL)))
-		die("Can't open display\n");
-
 	config_init();
 	cols = MAX(cols, 1);
 	rows = MAX(rows, 1);
@@ -2354,6 +2385,8 @@ run:
 	xinit(cols, rows);
 	xsetenv();
 	selinit();
+	/* live reload */
+	reload(-1);
 	run();
 
 	return 0;
