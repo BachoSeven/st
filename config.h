@@ -9,21 +9,21 @@
  */
 static int borderperc = 70;
 static char *fonts[] = {
-	"monospace:pixelsize=24:antialias=true:autohint=true",
-	"JuliaMono:pixelsize=24:antialias=true:autohint=true",
-	"Hack Nerd Font:pixelsize=24:antialias=true:autohint=true",
-	"scientifica:pixelsize=26:autohint=true"
+	"monospace:size=18:antialias=true:autohint=true",
+	"Cascadia Code PL:size=18:antialias=true:autohint=true",
+	"Hack Nerd Font:size=18:antialias=true:autohint=true",
+	"scientifica:size=18:autohint=true"
 };
 static int fonts_current = 0;
 static char *font2[] = {
-	"JoyPixels:pixelsize=21:antialias=true:autohint=true",
-	"Noto Color Emoji:pixelsize=21:antialias=true:autohint=true",
-	"Noto Sans CJK JP:pixelsize=21:antialias=true:autohint=true",
-	"Noto Sans CJK KR:pixelsize=21:antialias=true:autohint=true",
-	"Noto Sans CJK SC:pixelsize=21:antialias=true:autohint=true",
-	"Noto Sans CJK TC:pixelsize=21:antialias=true:autohint=true",
-	"Noto Sans Hebrew:pixelsize=17:antialias=true:autohint=true"
-	"Libertinus Sans:pixelsize=20:antialias=true:autohint=true"
+	"JoyPixels:size=16:antialias=true:autohint=true",
+	"Noto Color Emoji:size=16:antialias=true:autohint=true",
+	"Noto Sans CJK JP:size=18:antialias=true:autohint=true",
+	"Noto Sans CJK KR:size=18:antialias=true:autohint=true",
+	"Noto Sans CJK SC:size=18:antialias=true:autohint=true",
+	"Noto Sans CJK TC:size=18:antialias=true:autohint=true",
+	"Noto Sans Hebrew:size=18:antialias=true:autohint=true"
+	"Libertinus Sans:size=20:antialias=true:autohint=true"
 };
 
 /*
