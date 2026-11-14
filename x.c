@@ -162,6 +162,15 @@ static inline ushort sixd_to_16bit(int);
 static int xmakeglyphfontspecs(XftGlyphFontSpec *, const Glyph *, int, int, int);
 static void xdrawglyphfontspecs(const XftGlyphFontSpec *, Glyph, int, int, int);
 static void xdrawglyph(Glyph, int, int);
+
+/*
+ * Set from the SIGUSR1 handler, consumed by the main loop. The handler
+ * itself must stay async-signal-safe: doing the reload inline would
+ * free the fonts (and their HarfBuzz faces) while a shaping call may be
+ * in flight, which crashes st inside libharfbuzz.
+ */
+static volatile sig_atomic_t reload_pending = 0;
+
 static void xclear(int, int, int, int);
 static int xgeommasktogravity(int);
 static int ximopen(Display *);
@@ -179,6 +188,7 @@ static int xloadsparefont(FcPattern *, int);
 static void xloadsparefonts(void);
 static void xunloadfont(Font *);
 static void xunloadfonts(void);
+static void do_reload(void);
 static void xsetenv(void);
 static void xseturgency(int);
 static int evcol(XEvent *);
@@ -2151,8 +2161,15 @@ run(void)
 		tv = timeout >= 0 ? &seltv : NULL;
 
 		if (pselect(MAX(xfd, ttyfd)+1, &rfd, NULL, NULL, tv, NULL) < 0) {
-			if (errno == EINTR)
+			if (errno == EINTR) {
+				/* A signal (e.g. SIGUSR1 reload) arrived: run the
+				 * deferred work now, from a safe point. */
+				if (reload_pending) {
+					reload_pending = 0;
+					do_reload();
+				}
 				continue;
+			}
 			die("select failed: %s\n", strerror(errno));
 		}
 		clock_gettime(CLOCK_MONOTONIC, &now);
@@ -2284,12 +2301,20 @@ reload(int sig)
 		return;
 	}
 
+	reload_pending = 1;
+}
+
+/* Perform the deferred reload. Only called from the main loop. */
+static void
+do_reload(void)
+{
 	config_init();
 
 	/* colors, fonts */
 	xloadcols();
 	xunloadfonts();
 	xloadfonts(fonts[fonts_current], 0);
+	xloadsparefonts();
 
 	/* pretend the window just got resized */
 	cresize(win.w, win.h);
@@ -2298,7 +2323,6 @@ reload(int sig)
 	/* triggers re-render if we're visible. */
 	/* ttywrite("\033[O", 3, 0); */
 }
-
 void
 usage(void)
 {
