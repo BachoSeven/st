@@ -1733,6 +1733,9 @@ tsetmode(int priv, int set, int *args, int narg)
 			case 1015: /* urxvt mangled mouse mode; incompatible
 				      and can be mistaken for other control
 				      codes. */
+			case 1016: /* SGR pixel-coordinate mouse (unsupported) */
+			case 2048: /* real-mouse mode (unsupported) */
+			case 9001: /* Tmux `set-clipboard': unsupported */
 				break;
 			default:
 				fprintf(stderr,
@@ -2113,6 +2116,8 @@ strhandle(void)
 				 */
 				redraw();
 			}
+			return;
+		case 8: /* OSC 8 hyperlinks: accepted, unused */
 			return;
 		}
 		break;
