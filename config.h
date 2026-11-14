@@ -22,8 +22,11 @@ static char *font2[] = {
 	"Noto Sans CJK KR:size=18:antialias=true:autohint=true",
 	"Noto Sans CJK SC:size=18:antialias=true:autohint=true",
 	"Noto Sans CJK TC:size=18:antialias=true:autohint=true",
-	"Noto Sans Hebrew:size=18:antialias=true:autohint=true"
-	"Libertinus Sans:size=20:antialias=true:autohint=true"
+	"Noto Sans Hebrew:size=18:antialias=true:autohint=true",
+	"Libertinus Sans:size=20:antialias=true:autohint=true",
+	"Latin Modern Math:size=18:antialias=true:autohint=true",
+	"Symbola:size=18:antialias=true:autohint=true",
+	"Adwaita Sans:size=18:antialias=true:autohint=true"
 };
 
 /*
