@@ -11,13 +11,16 @@ static int borderperc = 70;
 static char *fonts[] = {
 	"monospace:size=18:antialias=true:autohint=true",
 	"Cascadia Code PL:size=18:antialias=true:autohint=true",
-	"Hack Nerd Font:size=18:antialias=true:autohint=true",
+	"Hack Nerd Font Mono:size=18:antialias=true:autohint=true",
 	"scientifica:size=18:autohint=true"
 };
 static int fonts_current = 0;
 static char *font2[] = {
-	"JoyPixels:size=16:antialias=true:autohint=true",
-	"Noto Color Emoji:size=16:antialias=true:autohint=true",
+	"JoyPixels:size=18:antialias=true:autohint=true",
+	"Noto Color Emoji:size=18:antialias=true:autohint=true",
+	"Hack Nerd Font Mono:size=18:antialias=true:autohint=true",
+	"Symbols Nerd Font Mono:size=18:antialias=true:autohint=true",
+	"Font Awesome 7 Free:style=Solid:size=18:antialias=true:autohint=true",
 	"Noto Sans CJK JP:size=18:antialias=true:autohint=true",
 	"Noto Sans CJK KR:size=18:antialias=true:autohint=true",
 	"Noto Sans CJK SC:size=18:antialias=true:autohint=true",
