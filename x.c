@@ -1476,7 +1476,7 @@ xmakeglyphfontspecs(XftGlyphFontSpec *specs, const Glyph *glyphs, int len, int x
 		if (f >= frclen) {
 			if (!font->set)
 				font->set = FcFontSort(0, font->pattern,
-				                       1, 0, &fcres);
+				                       0, 0, &fcres);
 			fcsets[0] = font->set;
 
 			/*
