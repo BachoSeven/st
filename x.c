@@ -1818,6 +1818,9 @@ xseticontitle(char *p)
 	XFree(prop.value);
 }
 
+static char *curtitle;
+static char *savedtitle;
+
 void
 xsettitle(char *p)
 {
@@ -1829,6 +1832,70 @@ xsettitle(char *p)
 	XSetWMName(xw.dpy, xw.win, &prop);
 	XSetTextProperty(xw.dpy, xw.win, &prop, xw.netwmname);
 	XFree(prop.value);
+
+	free(curtitle);
+	curtitle = xstrdup(p);
+}
+
+int
+xdecrqm(int mode)
+{
+	switch (mode) {
+	case 1:    return IS_SET(MODE_APPCURSOR) ? 1 : 2;
+	case 9:    return IS_SET(MODE_MOUSEX10) ? 1 : 2;
+	case 25:   return IS_SET(MODE_HIDE) ? 2 : 1;
+	case 1000: return IS_SET(MODE_MOUSEBTN) ? 1 : 2;
+	case 1002: return IS_SET(MODE_MOUSEMOTION) ? 1 : 2;
+	case 1003: return IS_SET(MODE_MOUSEMANY) ? 1 : 2;
+	case 1004: return IS_SET(MODE_FOCUS) ? 1 : 2;
+	case 1006: return IS_SET(MODE_MOUSESGR) ? 1 : 2;
+	case 1034: return IS_SET(MODE_8BIT) ? 1 : 2;
+	case 2004: return IS_SET(MODE_BRCKTPASTE) ? 1 : 2;
+	default:   return -1;
+	}
+}
+
+void
+xwinops(int op, int a1)
+{
+	char buf[256];
+	int len = 0;
+
+	switch (op) {
+	case 14: /* XTREPORTPIXEL: report window pixel size */
+		len = snprintf(buf, sizeof(buf), "\033[4;%d;%dt", win.w, win.h);
+		break;
+	case 16: /* XTREPORTCELL: report char cell size */
+		len = snprintf(buf, sizeof(buf), "\033[6;%d;%dt", win.cw, win.ch);
+		break;
+	case 18: /* BTTEXTAREA: report text area size */
+		len = snprintf(buf, sizeof(buf), "\033[8;%d;%dt", win.tw, win.th);
+		break;
+	case 21: /* XTREPORTLINETITLE: report title */
+		if (curtitle)
+			len = snprintf(buf, sizeof(buf), "\033]l%s\033\\", curtitle);
+		break;
+	case 22: /* push title to stack */
+		if (a1 == 0 || a1 == 2) {
+			free(savedtitle);
+			savedtitle = curtitle ? xstrdup(curtitle) : NULL;
+		}
+		return;
+	case 23: /* pop title from stack */
+		if (a1 == 0 || a1 == 2) {
+			if (savedtitle) {
+				xsettitle(savedtitle);
+				free(savedtitle);
+				savedtitle = NULL;
+			}
+		}
+		return;
+	default: /* unsupported: ignore */
+		return;
+	}
+
+	if (len > 0)
+		ttywrite(buf, len, 0);
 }
 
 int

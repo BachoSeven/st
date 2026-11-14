@@ -105,6 +105,9 @@ void ttywrite(const char *, size_t, int);
 int tinsync(uint);
 int ttyread_pending(void);
 
+int xdecrqm(int);
+void xwinops(int, int);
+
 void resettitle(void);
 
 void selclear(void);

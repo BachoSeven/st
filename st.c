@@ -1929,6 +1929,54 @@ csihandle(void)
 			goto unknown;
 		}
 		break;
+	case '$': /* DECRQM -- DEC Request Mode */
+		{
+			int st;
+
+			if (!csiescseq.priv || csiescseq.mode[1] != 'p')
+				goto unknown;
+			DEFAULT(csiescseq.arg[0], 0);
+			switch (csiescseq.arg[0]) {
+			case 6: /* DECOM -- Origin mode */
+				st = (term.c.state & CURSOR_ORIGIN) ? 1 : 2;
+				break;
+			case 7: /* DECAWM -- Autowrap */
+				st = IS_SET(MODE_WRAP) ? 1 : 2;
+				break;
+			case 12: /* SRM -- Send/Receive */
+				st = IS_SET(MODE_ECHO) ? 2 : 1;
+				break;
+			case 20: /* LNM -- Linefeed/new line */
+				st = IS_SET(MODE_CRLF) ? 1 : 2;
+				break;
+			case 47: /* DECPAM/DECPNM alternate screen buffer */
+			case 1047:
+			case 1049:
+				st = IS_SET(MODE_ALTSCREEN) ? 1 : 2;
+				break;
+			case 2026: /* synchronized output */
+				st = su ? 1 : 2;
+				break;
+			default:
+				st = xdecrqm(csiescseq.arg[0]);
+				break;
+			}
+			if (st < 0)
+				st = 4; /* permanently reset */
+			len = snprintf(buf, sizeof(buf), "\033[?%d;%d$y",
+					csiescseq.arg[0], st);
+			ttywrite(buf, len, 0);
+			break;
+		}
+	case 't': /* XTWINOPS -- Window manipulation */
+		if (csiescseq.priv)
+			goto unknown;
+		DEFAULT(csiescseq.arg[0], 0);
+		DEFAULT(csiescseq.arg[1], 0);
+		xwinops(csiescseq.arg[0], csiescseq.arg[1]);
+		break;
+	case '>': /* control sequence introducer quirks (e.g. CSI>q) */
+		break;
 	}
 }
 
