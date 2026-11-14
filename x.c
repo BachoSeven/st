@@ -1554,8 +1554,8 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 	int charlen = len * ((base.mode & ATTR_WIDE) ? 2 : 1);
 	int winx = borderpx + x * win.cw, winy = borderpx + y * win.ch,
 	    width = charlen * win.cw;
-	Color *fg, *bg, *temp, revfg, revbg, truefg, truebg;
-	XRenderColor colfg, colbg;
+	Color *fg, *bg, *ulc, *temp, revfg, revbg, truefg, truebg, trueulc;
+	XRenderColor colfg, colbg, colulc;
 	XRectangle r;
 
 	/* Fallback on color display for attributes not supported by the font */
@@ -1670,7 +1670,22 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 
 	/* Render underline and strikethrough. */
 	if (base.mode & ATTR_UNDERLINE) {
-		XftDrawRect(xw.draw, fg, winx, winy + dc.font.ascent + 1,
+		ulc = fg;
+		if (base.ulcol != -1) {
+			if (IS_TRUECOL(base.ulcol)) {
+				colulc.alpha = 0xffff;
+				colulc.red = TRUERED(base.ulcol);
+				colulc.green = TRUEGREEN(base.ulcol);
+				colulc.blue = TRUEBLUE(base.ulcol);
+				XftColorAllocValue(xw.dpy, xw.vis, xw.cmap,
+						&colulc, &trueulc);
+				ulc = &trueulc;
+			} else {
+				ulc = &dc.col[base.ulcol];
+			}
+		}
+
+		XftDrawRect(xw.draw, ulc, winx, winy + dc.font.ascent + 1,
 				width, 1);
 	}
 

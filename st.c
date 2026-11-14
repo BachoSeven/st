@@ -146,6 +146,7 @@ typedef struct {
 	size_t len;            /* raw string length */
 	char priv;
 	int arg[ESC_ARG_SIZ];
+	int carg[ESC_ARG_SIZ][4]; /* colon-separated sub-params, -1 if absent */
 	int narg;              /* nb of args */
 	char mode[2];
 } CSIEscape;
@@ -1081,7 +1082,8 @@ treset(void)
 	term.c = (TCursor){{
 		.mode = ATTR_NULL,
 		.fg = defaultfg,
-		.bg = defaultbg
+		.bg = defaultbg,
+		.ulcol = -1
 	}, .x = 0, .y = 0, .state = CURSOR_DEFAULT};
 
 	memset(term.tabs, 0, term.col * sizeof(*term.tabs));
@@ -1104,7 +1106,7 @@ treset(void)
 void
 tnew(int col, int row)
 {
-	term = (Term){ .c = { .attr = { .fg = defaultfg, .bg = defaultbg } } };
+	term = (Term){ .c = { .attr = { .fg = defaultfg, .bg = defaultbg, .ulcol = -1 } } };
 	tresize(col, row);
 	treset();
 }
@@ -1249,6 +1251,7 @@ void
 csiparse(void)
 {
 	char *p = csiescseq.buf, *np;
+	int i;
 	long int v;
 
 	csiescseq.narg = 0;
@@ -1259,6 +1262,8 @@ csiparse(void)
 
 	csiescseq.buf[csiescseq.len] = '\0';
 	while (p < csiescseq.buf+csiescseq.len) {
+		for (i = 0; i < 4; i++)
+			csiescseq.carg[csiescseq.narg][i] = -1;
 		np = NULL;
 		v = strtol(p, &np, 10);
 		if (np == p)
@@ -1267,6 +1272,11 @@ csiparse(void)
 			v = -1;
 		csiescseq.arg[csiescseq.narg++] = v;
 		p = np;
+		for (i = 0; *p == ':' && i < 4; i++) {
+			p++;
+			csiescseq.carg[csiescseq.narg-1][i] = strtol(p, &np, 10);
+			p = np;
+		}
 		if (*p != ';' || csiescseq.narg == ESC_ARG_SIZ)
 			break;
 		p++;
@@ -1466,6 +1476,18 @@ tdefcolor(int *attr, int *npar, int l)
 	return idx;
 }
 
+/* underline color from colon-style SGR 58 sub-params */
+static int32_t
+ulcolor(int type, int x, int y, int z)
+{
+	if (type == 5)
+		return BETWEEN(x, 0, 255) ? (int32_t)x : -1;
+	if (type == 2 && BETWEEN(x, 0, 255)
+	              && BETWEEN(y, 0, 255) && BETWEEN(z, 0, 255))
+		return TRUECOLOR(x, y, z);
+	return -1;
+}
+
 void
 tsetattr(int *attr, int l)
 {
@@ -1486,6 +1508,7 @@ tsetattr(int *attr, int l)
 				ATTR_STRUCK     );
 			term.c.attr.fg = defaultfg;
 			term.c.attr.bg = defaultbg;
+			term.c.attr.ulcol = -1;
 			break;
 		case 1:
 			term.c.attr.mode |= ATTR_BOLD;
@@ -1497,7 +1520,13 @@ tsetattr(int *attr, int l)
 			term.c.attr.mode |= ATTR_ITALIC;
 			break;
 		case 4:
-			term.c.attr.mode |= ATTR_UNDERLINE;
+			if (csiescseq.carg[i][0] < 0) {
+				term.c.attr.mode |= ATTR_UNDERLINE;
+			} else if (csiescseq.carg[i][0] != 0) {
+				term.c.attr.mode |= ATTR_UNDERLINE;
+			} else {
+				term.c.attr.mode &= ~ATTR_UNDERLINE;
+			}
 			break;
 		case 5: /* slow blink */
 			/* FALLTHROUGH */
@@ -1512,6 +1541,9 @@ tsetattr(int *attr, int l)
 			break;
 		case 9:
 			term.c.attr.mode |= ATTR_STRUCK;
+			break;
+		case 21:
+			term.c.attr.mode |= ATTR_UNDERLINE;
 			break;
 		case 22:
 			term.c.attr.mode &= ~(ATTR_BOLD | ATTR_FAINT);
@@ -1547,6 +1579,20 @@ tsetattr(int *attr, int l)
 			break;
 		case 49:
 			term.c.attr.bg = defaultbg;
+			break;
+		case 58:
+			if (csiescseq.carg[i][0] < 0) {
+				if ((idx = tdefcolor(attr, &i, l)) >= 0)
+					term.c.attr.ulcol = idx;
+			} else {
+				idx = ulcolor(csiescseq.carg[i][0], csiescseq.carg[i][1],
+				              csiescseq.carg[i][2], csiescseq.carg[i][3]);
+				if (idx >= 0)
+					term.c.attr.ulcol = idx;
+			}
+			break;
+		case 59:
+			term.c.attr.ulcol = -1;
 			break;
 		default:
 			if (BETWEEN(attr[i], 30, 37)) {
