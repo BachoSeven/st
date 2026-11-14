@@ -239,6 +239,42 @@ static uchar utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8};
 static Rune utfmin[UTF_SIZ + 1] = {       0,    0,  0x80,  0x800,  0x10000};
 static Rune utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
 
+/* Synchronized updates: suspend drawing between BSU and ESU. */
+#include <time.h>
+static int su = 0;
+static struct timespec sutv;
+
+static void
+tsync_begin(void)
+{
+	clock_gettime(CLOCK_MONOTONIC, &sutv);
+	su = 1;
+}
+
+static void
+tsync_end(void)
+{
+	su = 0;
+}
+
+int
+tinsync(uint timeout)
+{
+	struct timespec now;
+
+	if (su && !clock_gettime(CLOCK_MONOTONIC, &now)
+	    && TIMEDIFF(now, sutv) >= (long)timeout)
+		su = 0;
+	return su;
+}
+
+static int twrite_aborted = 0;
+int
+ttyread_pending(void)
+{
+	return twrite_aborted;
+}
+
 ssize_t
 xwrite(int fd, const char *s, size_t len)
 {
@@ -848,7 +884,7 @@ ttyread(void)
 	int ret, written;
 
 	/* append read bytes to unprocessed bytes */
-	ret = read(cmdfd, buf+buflen, LEN(buf)-buflen);
+	ret = twrite_aborted ? 1 : read(cmdfd, buf+buflen, LEN(buf)-buflen);
 
 	switch (ret) {
 	case 0:
@@ -856,7 +892,7 @@ ttyread(void)
 	case -1:
 		die("couldn't read from shell: %s\n", strerror(errno));
 	default:
-		buflen += ret;
+		buflen += twrite_aborted ? 0 : ret;
 		written = twrite(buf, buflen, 0);
 		buflen -= written;
 		/* keep any incomplete UTF-8 byte sequence for the next call */
@@ -1019,6 +1055,7 @@ tsetdirtattr(int attr)
 void
 tfulldirt(void)
 {
+	tsync_end();
 	tsetdirt(0, term.row-1);
 }
 
@@ -1635,6 +1672,12 @@ tsetmode(int priv, int set, int *args, int narg)
 			case 2004: /* 2004: bracketed paste mode */
 				xsetmode(set, MODE_BRCKTPASTE);
 				break;
+			case 2026: /* synchronized output (DECSET/DECRESET) */
+				if (set)
+					tsync_begin();
+				else
+					tsync_end();
+				break;
 			/* Not implemented mouse modes. See comments there. */
 			case 1001: /* mouse highlight mode; can hang the
 				      terminal by design when implemented. */
@@ -1983,6 +2026,14 @@ strhandle(void)
 		xsettitle(strescseq.args[0]);
 		return;
 	case 'P': /* DCS -- Device Control String */
+		/* Synchronized-Updates: BSU/ESU
+		 * https://gitlab.com/gnachman/iterm2/-/wikis/
+		 * synchronized-updates-spec */
+		if (strstr(strescseq.buf, "=1s") == strescseq.buf)
+			tsync_begin(); /* BSU */
+		else if (strstr(strescseq.buf, "=2s") == strescseq.buf)
+			tsync_end(); /* ESU */
+		return;
 	case '_': /* APC -- Application Program Command */
 	case '^': /* PM -- Privacy Message */
 		return;
@@ -2578,6 +2629,9 @@ twrite(const char *buf, int buflen, int show_ctrl)
 	int charsize;
 	Rune u;
 	int n;
+	int su0 = su;
+
+	twrite_aborted = 0;
 
 	for (n = 0; n < buflen; n += charsize) {
 		if (IS_SET(MODE_UTF8)) {
@@ -2588,6 +2642,10 @@ twrite(const char *buf, int buflen, int show_ctrl)
 		} else {
 			u = buf[n] & 0xFF;
 			charsize = 1;
+		}
+		if (su0 && !su) {
+			twrite_aborted = 1;
+			break;  /* ESU - allow rendering before a new BSU */
 		}
 		if (show_ctrl && ISCONTROL(u)) {
 			if (u & 0x80) {

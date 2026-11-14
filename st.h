@@ -102,6 +102,8 @@ int ttynew(char *, char *, char *, char **);
 size_t ttyread(void);
 void ttyresize(int, int);
 void ttywrite(const char *, size_t, int);
+int tinsync(uint);
+int ttyread_pending(void);
 
 void resettitle(void);
 

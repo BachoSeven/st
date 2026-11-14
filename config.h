@@ -78,6 +78,12 @@ static double minlatency = 8;
 static double maxlatency = 33;
 
 /*
+ * Synchronized-Update timeout in ms
+ * https://gitlab.com/gnachman/iterm2/-/wikis/synchronized-updates-spec
+ */
+static uint su_timeout = 200;
+
+/*
  * blinking timeout (set to 0 to disable blinking) for the terminal blinking
  * attribute.
  */
@@ -245,6 +251,7 @@ ResourcePref resources[] = {
 		{ "minlatency",   INTEGER, &minlatency },
 		{ "maxlatency",   INTEGER, &maxlatency },
 		{ "blinktimeout", INTEGER, &blinktimeout },
+		{ "su_timeout",   INTEGER, &su_timeout },
 		{ "bellvolume",   INTEGER, &bellvolume },
 		{ "tabspaces",    INTEGER, &tabspaces },
 		{ "borderperc",   INTEGER, &borderperc },
